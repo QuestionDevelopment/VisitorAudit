@@ -64,7 +64,7 @@ class Vistor_Audit_Admin extends \Visitor_Audit\Vistor_Audit_Config
      * 
      * @return void
      */
-    public function visitor_audit_settings()
+    public function settings()
     {
 	foreach($this->config_valid as $c) {
 	    register_setting("visitor_audit_config","visitor_audit_".$c);

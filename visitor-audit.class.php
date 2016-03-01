@@ -40,6 +40,8 @@ class Visitor_Audit extends \Visitor_Audit\Visitor_Audit_Setup
     private $benchmark = 0;
     /** @var boolean Tracks status of current visitor (true = banned) */
     private $banned = false;
+    /** $var boolean The status of the plugin (true = enabled */
+    private $status = true;
     
     /** 
      * Constructor for Visitor_Audit plugin class.
@@ -59,7 +61,20 @@ class Visitor_Audit extends \Visitor_Audit\Visitor_Audit_Setup
         $this->ip_forwarded = $this->ip_forwarded();
         $this->config();
     }
-	
+    
+    /**
+     * Sets the status (if the system runs) for the plugin
+     *
+     * @param boolean What to set the status of the system to
+     * @return void
+     */
+    public function admin()
+    {
+        if (current_user_can('manage_options')){
+            $this->status = false;
+        }
+    }
+    
     /**
      * Initializes the Visitor Audit system.
      * Blocks all banned visitors then assigns all remaining visitors an id
@@ -70,10 +85,8 @@ class Visitor_Audit extends \Visitor_Audit\Visitor_Audit_Setup
     {
         $this->database_maintenance("banned");
         $this->banned();
-        $this->exist();
-        if ($this->id == 0){ $this->create(); }
     }
-
+    
     /**
      * Loads in the user defined configuration variables.
      * This will overwrite the default configuration assigned within visitor-audit.config.php
@@ -244,9 +257,11 @@ class Visitor_Audit extends \Visitor_Audit\Visitor_Audit_Setup
      * 
      * @return void
      */
-    public function history()
+    public function log()
     {
-        if ($this->banned == false){
+        if ($this->status AND $this->banned == false){
+            $this->exist();
+            if ($this->id == 0){ $this->create(); }            
             if ($this->id != 0){
                 $insert = array();				
                 $insert["visitor_audit_id"] = $this->id;
