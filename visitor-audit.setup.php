@@ -55,7 +55,8 @@ class Visitor_Audit_Setup extends \Visitor_Audit\Vistor_Audit_Config
 		visitor_audit_banned_type tinyint(1) NOT NULL DEFAULT 0,
 		visitor_audit_banned_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		UNIQUE KEY visitor_audit_banned_id (visitor_audit_banned_id),
-		KEY visitor_audit_banned_ip (visitor_audit_banned_ip)
+		KEY visitor_audit_banned_ip (visitor_audit_banned_ip),
+                KEY visitor_audit_banned_ip_forwarded (visitor_audit_banned_ip_forwarded)
 		) $charset_collate;";
 	    $this->db->query($sql_visitor_audit_banned);
         }
