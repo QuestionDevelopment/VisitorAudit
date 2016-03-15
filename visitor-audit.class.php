@@ -154,7 +154,7 @@ class Visitor_Audit extends \Visitor_Audit\Visitor_Audit_Setup
             if (!empty($result[0]->visitor_audit_banned_ip)){
                 $banned_status = true;
                 if ($result[0]->visitor_audit_banned_type == 1){ $this->banned_retention = 0; } //indefinite
-            }			
+            }
         }
         //if visitor meets critiria block them
         if ($implement_ban AND $banned_status){
@@ -242,10 +242,10 @@ class Visitor_Audit extends \Visitor_Audit\Visitor_Audit_Setup
         $insert["visitor_audit_ip"] = $this->ip_address;
         $insert["visitor_audit_ip_forwarded"] = $this->ip_forwarded;		
         if (!empty($_SERVER['HTTP_USER_AGENT'])) {
-            $insert["visitor_audit_useragent"] = $_SERVER['HTTP_USER_AGENT'];
+            $insert["visitor_audit_useragent"] = preg_replace("/[^a-zA-Z0-9-_. ]/", "", $_SERVER['HTTP_USER_AGENT']);
         }		
         if (!empty($_SERVER['HTTP_REFERER'])) {
-            $insert["visitor_audit_referer"] = $_SERVER['HTTP_REFERER'];
+            $insert["visitor_audit_referer"] = preg_replace("/[^a-zA-Z0-9-_. ]/", "", $_SERVER['HTTP_REFERER']);
         }			
         $this->db->insert($this->db->prefix . "visitor_audit", $insert);
         $this->id = $this->db->insert_id;
@@ -422,7 +422,7 @@ class Visitor_Audit extends \Visitor_Audit\Visitor_Audit_Setup
     private function ip_address()
     {
         if (!empty($_SERVER['REMOTE_ADDR'])){
-             return $_SERVER['REMOTE_ADDR'];
+            return preg_replace("/[^0-9:. ]/", "", $_SERVER['REMOTE_ADDR']);
         } else {
             return 0;			
         }
@@ -436,7 +436,7 @@ class Visitor_Audit extends \Visitor_Audit\Visitor_Audit_Setup
     private function ip_forwarded()
     {
         if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
-            return $_SERVER['HTTP_X_FORWARDED_FOR'];
+            return preg_replace("/[^0-9:. ]/", "", $_SERVER['HTTP_X_FORWARDED_FOR']);
         } else {
             return 0;			
         }

@@ -81,7 +81,7 @@ class Vistor_Audit_Admin extends \Visitor_Audit\Vistor_Audit_Config
         $table = array();
         $table["columns"] = array("ID", "IP Address","IP Fowarded", "Last Visit", "Page/Error Per Minute", "Status", "Actions");
         $table["rows"] = array();
-        $results = $this->db->get_results("SELECT * FROM ". $this->db->prefix . "visitor_audit");
+        $results = $this->db->get_results("SELECT * FROM ". $this->db->prefix . "visitor_audit LIMIT 1000");
         if (isset($results) AND is_array($results) AND count($results)){
             $original_id = $this->system->id;
             foreach ($results as $result){
@@ -134,7 +134,7 @@ class Vistor_Audit_Admin extends \Visitor_Audit\Vistor_Audit_Config
         $table = array();
         $table["columns"] = array("ID", "IP Address", "IP Fowarded", "Banned Time", "Action");
         $table["rows"] = array();
-        $results = $this->db->get_results("SELECT * FROM ". $this->db->prefix . "visitor_audit_banned");
+        $results = $this->db->get_results("SELECT * FROM ". $this->db->prefix . "visitor_audit_banned LIMIT 1000");
         if (isset($results) AND is_array($results) AND count($results)){
             foreach ($results as $result){
                 $row = array();
@@ -278,7 +278,7 @@ class Vistor_Audit_Admin extends \Visitor_Audit\Vistor_Audit_Config
         if (!empty($_REQUEST["visitor_audit_id"])){ $id = (int)$_REQUEST["visitor_audit_id"]; }
         if ($id){
             $divider = "----------------------------------------------------------------------------<br>";
-            $query = $this->db->prepare("SELECT * FROM ". $this->db->prefix . "visitor_audit_history WHERE visitor_audit_id = %d", $id);
+            $query = $this->db->prepare("SELECT * FROM ". $this->db->prefix . "visitor_audit_history WHERE visitor_audit_id = %d LIMIT 1000", $id);
             $results = $this->db->get_results($query);          
  
             foreach($results as $result) {
@@ -357,7 +357,7 @@ class Vistor_Audit_Admin extends \Visitor_Audit\Vistor_Audit_Config
         $message = "";
         if (!empty($_REQUEST["visitor_audit_id"])){ $id = (int)$_REQUEST["visitor_audit_id"]; }
         if ($id){
-            $query = $this->db->prepare("SELECT * FROM ". $this->db->prefix . "visitor_audit WHERE visitor_audit_id = %d", $id);
+            $query = $this->db->prepare("SELECT * FROM ". $this->db->prefix . "visitor_audit WHERE visitor_audit_id = %d LIMIT 1", $id);
             $result = $this->db->get_results($query);  
             if (!empty($result[0]->visitor_audit_ip)){
                 $query_check = $this->db->prepare("SELECT * FROM ". $this->db->prefix . "visitor_audit_banned
